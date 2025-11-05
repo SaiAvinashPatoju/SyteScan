@@ -1,0 +1,8 @@
+names:
+  0: furniture
+  1: chair
+  2: sofa
+  3: table
+path: C:\Users\Avinash\Desktop\projects\sytescan\furniture_dataset_demo
+train: train/images
+val: val/images
