@@ -1,61 +1,50 @@
-# SyteScan Progress Analyzer
+# SyteScan - Progress Analyzer
 
-AI-powered construction progress tracking platform that compares architectural blueprints against actual implementation through room images.
+SyteScan is a comprehensive construction progress monitoring solution that uses computer vision to analyze site photos and track project completion.
 
 ## Project Structure
 
-```
-├── src/                    # Next.js frontend
-│   ├── app/               # App router pages
-│   ├── components/        # React components
-│   └── test/             # Frontend tests
-├── backend/               # FastAPI backend
-│   ├── app/              # Application code
-│   │   ├── models/       # SQLAlchemy models
-│   │   ├── schemas/      # Pydantic schemas
-│   │   ├── services/     # Business logic
-│   │   └── database/     # Database utilities
-│   └── tests/            # Backend tests
-└── uploads/              # File storage
-```
+The project is organized into the following components:
 
-## Development Setup
+- **`frontend/`**: Next.js application for the user interface.
+- **`backend/`**: Python FastAPI backend for image processing and data management.
+- **`ml/`**: Machine Learning resources (YOLO models, training data, runs).
+- **`scripts/`**: Utility scripts for setup, testing, and deployment.
+- **`docs/`**: Developer and deployment documentation.
 
-### Frontend (Next.js)
+## Getting Started
 
-```bash
-npm install
-npm run dev
-```
+### Prerequisites
 
-### Backend (FastAPI)
+- Node.js (v18+)
+- Python (v3.11+)
+- Docker & Docker Compose (optional, for containerized run)
 
-```bash
-cd backend
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-pip install -r requirements.txt
-python main.py
-```
+### Setup
 
-## Testing
+1.  **Initialize the project:**
+    ```bash
+    .\scripts\setup.bat
+    ```
 
-### Frontend Tests
+2.  **Start Development Servers:**
+    ```bash
+    .\scripts\start-dev.bat
+    ```
+    This will start both the frontend (localhost:3000) and backend (localhost:8000).
+
+## Docker Deployment
+
+To run the full stack using Docker:
 
 ```bash
-npm test
+docker-compose up --build
 ```
 
-### Backend Tests
+Ensure you have updated your `docker-compose.yml` to reflect the new `frontend/` and `backend/` build contexts.
 
-```bash
-cd backend
-pytest
-```
+## Documentation
 
-## Technology Stack
-
-- **Frontend**: Next.js 14, TypeScript, TailwindCSS, React Hook Form, Recharts
-- **Backend**: FastAPI, SQLAlchemy, Pydantic, YOLOv8
-- **Database**: SQLite (development), PostgreSQL (production)
-- **AI**: Ultralytics YOLOv8 for object detection
+- [Development Guide](docs/DEVELOPMENT.md): Code standards and workflow.
+- [Setup Guide](docs/DEV-SETUP.md): Detailed installation instructions.
+- [Deployment](docs/DEPLOYMENT.md): Production deployment steps.
