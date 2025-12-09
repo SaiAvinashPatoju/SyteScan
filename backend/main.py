@@ -51,24 +51,15 @@ app.add_middleware(LoggingMiddleware)
 cors_origins = settings.cors_origins
 logger.info(f"CORS allowed origins: {cors_origins}")
 
-# Check if wildcard is requested (for debugging)
-if "*" in cors_origins:
-    logger.warning("CORS wildcard '*' enabled - use only for debugging!")
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=["*"],
-        allow_credentials=False,  # Must be False with wildcard
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
-else:
-    app.add_middleware(
-        CORSMiddleware,
-        allow_origins=cors_origins,
-        allow_credentials=True,
-        allow_methods=["*"],
-        allow_headers=["*"],
-    )
+# Always allow all origins for simplicity on Render
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allow_headers=["*"],
+    expose_headers=["*"],
+)
 
 # Add exception handlers
 app.add_exception_handler(SyteScanException, sytescan_exception_handler)
