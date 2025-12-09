@@ -27,7 +27,7 @@ export default function UploadPage({ params }: UploadPageProps) {
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8001'}/api/projects/${projectId}`);
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'}/api/projects/${projectId}`);
         if (!response.ok) {
           throw new Error('Project not found');
         }
@@ -128,7 +128,7 @@ export default function UploadPage({ params }: UploadPageProps) {
           >
             ← Create Another Project
           </button>
-          
+
           <button
             onClick={() => router.push('/')}
             className="text-blue-600 hover:text-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-md px-2 py-1"
