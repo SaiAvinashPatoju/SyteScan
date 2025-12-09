@@ -173,6 +173,60 @@ sudo nginx -t
 sudo systemctl reload nginx
 ```
 
+### Option 4: Cloud Deployment (Render + Vercel)
+
+#### Vercel (Frontend)
+
+1. **Connect Repository:**
+   - Go to [vercel.com](https://vercel.com)
+   - Import your GitHub repository
+   - Vercel auto-detects Next.js
+
+2. **Configure Environment:**
+   ```
+   NEXT_PUBLIC_API_URL=https://your-backend.onrender.com
+   ```
+
+3. **Deploy:**
+   - Push to main branch triggers automatic deployment
+   - Custom domain: Settings → Domains
+
+#### Render (Backend)
+
+1. **Create Web Service:**
+   - Go to [render.com](https://render.com)
+   - New → Web Service → Connect GitHub repo
+
+2. **Configure Build:**
+   ```yaml
+   Build Command: pip install -r backend/requirements.txt
+   Start Command: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
+   ```
+
+3. **Environment Variables:**
+   ```
+   DATABASE_URL=postgresql://... (use Render PostgreSQL)
+   CORS_ORIGINS=https://your-frontend.vercel.app
+   SECRET_KEY=<generate-secure-key>
+   LOG_LEVEL=INFO
+   ```
+
+4. **Add PostgreSQL:**
+   - New → PostgreSQL
+   - Copy Internal Database URL to backend env vars
+
+#### Railway (Alternative)
+
+```bash
+# Install Railway CLI
+npm install -g @railway/cli
+
+# Login and deploy
+railway login
+railway init
+railway up
+```
+
 ## Environment Configuration
 
 ### Production Environment Variables
@@ -474,4 +528,125 @@ docker-compose up -d
    - Review and update security configurations
    - Performance optimization review
 
-For additional support, refer to the development documentation in `DEVELOPMENT.md`.
+For additional support, refer to the development documentation in `DEV-SETUP.md`.
+
+---
+
+## Production Readiness Checklist
+
+Before going live, verify:
+
+### Environment
+- [ ] All environment variables configured
+- [ ] SECRET_KEY is a unique, secure random string
+- [ ] DATABASE_URL points to production database
+- [ ] CORS_ORIGINS contains only allowed domains
+- [ ] LOG_LEVEL set to INFO or WARNING
+
+### Security
+- [ ] HTTPS enabled with valid SSL certificate
+- [ ] No hardcoded secrets in code
+- [ ] File upload size limits configured
+- [ ] Rate limiting enabled (nginx/load balancer)
+
+### Infrastructure
+- [ ] Health check endpoint responds (`/health`)
+- [ ] Database backups configured
+- [ ] Log aggregation set up
+- [ ] Monitoring/alerting configured
+
+### Performance
+- [ ] Static assets served via CDN
+- [ ] Database connection pooling enabled
+- [ ] Multiple backend workers (uvicorn --workers 4)
+
+### Instance Sizing Recommendations
+
+| Component | Minimum | Recommended |
+|-----------|---------|-------------|
+| Frontend | 256MB RAM | 512MB RAM |
+| Backend | 512MB RAM, 1 CPU | 1GB RAM, 2 CPU |
+| Database | 256MB RAM | 1GB RAM (PostgreSQL) |
+
+---
+
+## Rollback Plan
+
+### Quick Rollback (Docker)
+
+```bash
+# Stop current deployment
+docker-compose down
+
+# Pull previous version
+git checkout <previous-tag>
+
+# Rebuild and start
+docker-compose up --build -d
+```
+
+### Database Rollback
+
+```bash
+# Restore from backup
+cp backup/sytescan_YYYYMMDD_HHMMSS.db backend/sytescan.db
+
+# Restart backend
+docker-compose restart backend
+```
+
+### Rollback Checklist
+
+1. [ ] Identify the issue and last working version
+2. [ ] Notify stakeholders of rollback
+3. [ ] Stop current deployment
+4. [ ] Restore database if needed
+5. [ ] Deploy previous version
+6. [ ] Verify health checks pass
+7. [ ] Test critical functionality
+8. [ ] Monitor for issues
+9. [ ] Document root cause
+
+---
+
+## Runbook: Emergency Procedures
+
+### Service Down
+
+```bash
+# Check container status
+docker-compose ps
+
+# Check logs
+docker-compose logs --tail=100 backend
+docker-compose logs --tail=100 frontend
+
+# Restart services
+docker-compose restart
+```
+
+### High Memory Usage
+
+```bash
+# Check resource usage
+docker stats
+
+# Restart specific service
+docker-compose restart backend
+```
+
+### Database Issues
+
+```bash
+# Check database file
+ls -la backend/sytescan.db
+
+# Backup and reset
+cp backend/sytescan.db backup/
+rm backend/sytescan.db
+docker-compose restart backend
+```
+
+---
+
+*Last updated: December 2024*

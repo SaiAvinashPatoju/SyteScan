@@ -1,54 +1,126 @@
-# Dependencies
-node_modules/
-backend/venv/
-backend/__pycache__/
-backend/**/__pycache__/
+# ==================================
+# SyteScan Progress Analyzer .gitignore
+# ==================================
 
-# Next.js
+# ============ Python ============
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+backend/venv/
+
+# Pytest / Coverage
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# ============ Node.js ============
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# ============ Next.js ============
 .next/
 out/
+.vercel
 
-# Production
+# ============ Build outputs ============
 build/
 dist/
+*.min.js
+*.min.css
 
-# Environment variables
+# ============ Environment ============
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+.env*.local
 
-# Database
+# ============ Database ============
 *.db
 *.sqlite
+*.sqlite3
 
-# Uploads
+# ============ Uploads / Runtime data ============
 uploads/projects/
 !uploads/.gitkeep
 
-# IDE
+# ============ IDE / Editors ============
 .vscode/
 .idea/
+*.swp
+*.swo
+*~
+*.sublime-project
+*.sublime-workspace
 
-# OS
+# ============ OS ============
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+desktop.ini
 
-# Logs
+# ============ Logs ============
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+logs/
+*.log.*
 
-# Python
-*.pyc
-*.pyo
-*.pyd
-__pycache__/
-.pytest_cache/
-.coverage
-htmlcov/
-
-# Testing
+# ============ Testing ============
 coverage/
+.nyc_output/
+
+# ============ Large datasets / training ============
+# Keep small samples, ignore full datasets
+data/francesco_training/
+!data/sample/
+
+# ============ Model weights (keep tracked, but be careful) ============
+# Uncomment below if you want to ignore large model files
+# *.pt
+# *.pth
+# *.onnx
+# *.pb
+
+# ============ YOLO training runs ============
+runs/
+backend/runs/
+
+# ============ Misc ============
+*.bak
+*.tmp
+*.temp
+tree.txt

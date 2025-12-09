@@ -1,1 +1,2 @@
-# Keep uploads directory in git
+# Keep this directory for file uploads
+# This file ensures the directory is tracked in git

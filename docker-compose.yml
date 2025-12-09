@@ -1,10 +1,18 @@
+# ==================================
+# SyteScan Docker Compose
+# ==================================
+# Local development and deployment orchestration
+# Usage: docker-compose up --build
+# ==================================
+
 version: '3.8'
 
 services:
+  # ============ Frontend ============
   frontend:
     build:
-      context: ./frontend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile.frontend
     ports:
       - "3000:3000"
     environment:
@@ -14,33 +22,47 @@ services:
       - backend
     networks:
       - sytescan-network
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "wget", "-q", "--spider", "http://localhost:3000" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
+  # ============ Backend ============
   backend:
     build:
-      context: ./backend
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: Dockerfile.backend
     ports:
       - "8000:8000"
     environment:
       - DATABASE_URL=sqlite:///./sytescan.db
       - UPLOAD_DIR=/app/uploads
       - LOG_LEVEL=INFO
+      - CORS_ORIGINS=http://localhost:3000,http://frontend:3000
     volumes:
-      - ./uploads:/app/uploads
-      - ./backend/sytescan.db:/app/sytescan.db
+      - uploads:/app/uploads
+      - database:/app/data
     networks:
       - sytescan-network
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8000/health')"]
+      test: [ "CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')" ]
       interval: 30s
       timeout: 10s
       retries: 3
       start_period: 40s
 
+# ============ Networks ============
 networks:
   sytescan-network:
     driver: bridge
 
+# ============ Volumes ============
 volumes:
   uploads:
+    driver: local
   database:
+    driver: local

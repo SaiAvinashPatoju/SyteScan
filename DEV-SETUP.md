@@ -1,138 +1,261 @@
-# SyteScan Progress Analyzer - Development Setup Guide
+# SyteScan Progress Analyzer - Development Setup
+
+Complete guide for setting up the SyteScan development environment.
+
+## Prerequisites
+
+| Requirement | Version | Check Command |
+|-------------|---------|---------------|
+| Node.js | 18+ | `node --version` |
+| Python | 3.11+ | `python --version` |
+| Git | Latest | `git --version` |
+| Docker | Optional | `docker --version` |
 
 ## Quick Start
 
-### 1. Automated Setup
-Run the setup script to install all dependencies:
+### Option 1: Automated Setup (Recommended)
+
+**Windows:**
 ```bash
-setup.bat
+scripts\windows\setup.bat
+scripts\windows\start-dev.bat
 ```
 
-### 2. Start Development Servers
+**macOS/Linux:**
 ```bash
-start-dev.bat
+chmod +x scripts/*.sh
+./scripts/setup.sh
+make run-frontend  # Terminal 1
+make run-backend   # Terminal 2
 ```
 
-This will start both frontend (port 3000) and backend (port 8000) servers.
+### Option 2: Make (Unix/WSL)
 
-### 3. Run Tests
 ```bash
-run-tests.bat
+make setup    # Install all dependencies
+make run      # Show run instructions
 ```
+
+### Option 3: Docker
+
+```bash
+docker-compose up --build
+# Frontend: http://localhost:3000
+# Backend:  http://localhost:8000
+```
+
+---
+
+## Manual Setup
+
+### 1. Clone & Configure
+
+```bash
+git clone <repository-url>
+cd sytescan
+
+# Create environment file
+cp .env.example .env.local
+```
+
+### 2. Frontend Setup
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+# → http://localhost:3000
+```
+
+### 3. Backend Setup
+
+```bash
+cd backend
+
+# Create virtual environment
+python -m venv venv
+
+# Activate (choose your OS)
+# Windows:
+venv\Scripts\activate
+# macOS/Linux:
+source venv/bin/activate
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Start server
+python main.py
+# → http://localhost:8000
+```
+
+---
+
+## Project Structure
+
+```
+sytescan/
+├── src/                    # Next.js frontend
+│   ├── app/               # App router pages
+│   ├── components/        # React components
+│   ├── lib/               # Utilities
+│   └── types/             # TypeScript types
+├── backend/               # FastAPI backend
+│   ├── app/               # Application code
+│   │   ├── api/          # API routes
+│   │   ├── models/       # Database models
+│   │   ├── services/     # Business logic
+│   │   └── database/     # DB utilities
+│   └── tests/            # Backend tests
+├── scripts/               # Helper scripts
+│   └── windows/          # Windows batch files
+├── data/                  # Training datasets
+│   └── sample/           # Small test dataset
+├── docs/                  # Documentation
+└── uploads/              # Runtime file storage
+```
+
+---
+
+## Development Workflow
+
+### Running Tests
+
+```bash
+# All tests
+make test
+
+# Frontend only
+npm test
+
+# Backend only
+cd backend && pytest
+
+# End-to-end
+npm run test:e2e
+```
+
+### Linting
+
+```bash
+# Frontend (ESLint)
+npm run lint
+
+# Backend (flake8)
+cd backend && flake8 app/
+```
+
+### Database
+
+SQLite is used by default. The database file (`sytescan.db`) is created automatically.
+
+**Reset database:**
+```bash
+rm backend/sytescan.db
+# Restart backend to recreate
+```
+
+---
+
+## API Documentation
+
+Once the backend is running:
+
+| URL | Description |
+|-----|-------------|
+| http://localhost:8000/docs | Swagger UI |
+| http://localhost:8000/redoc | ReDoc |
+| http://localhost:8000/health | Health check |
+
+---
 
 ## VS Code Integration
 
 ### Debug Configurations
-- **Debug Full Stack**: Starts both frontend and backend in debug mode
-- **Debug Frontend (Next.js)**: Debug the Next.js frontend only
-- **Debug Backend (FastAPI)**: Debug the FastAPI backend only
-- **Debug Tests**: Debug frontend or backend tests
 
-### Tasks Available
-- **Setup: Complete Project Setup**: Full automated setup
-- **Run: Frontend Development**: Start frontend dev server
-- **Run: Backend Development**: Start backend dev server
-- **Test: Frontend/Backend**: Run tests
-- **Build: Frontend Production**: Build for production
-- **Docker: Build and Run**: Run with Docker
+The project includes VS Code configurations for debugging:
 
-### Keyboard Shortcuts
-- `Ctrl+Shift+P` → "Tasks: Run Task" to access all tasks
-- `F5` → Start debugging (select configuration)
-- `Ctrl+F5` → Run without debugging
+- **Debug Full Stack** - Both frontend and backend
+- **Debug Frontend (Next.js)** - Frontend only
+- **Debug Backend (FastAPI)** - Backend only
 
-## Manual Setup (if needed)
+### Tasks
 
-### Prerequisites
-- Node.js 18+
-- Python 3.11+
-- Git
+Access via `Ctrl+Shift+P` → "Tasks: Run Task":
 
-### Frontend Setup
+- Setup: Complete Project Setup
+- Run: Frontend/Backend Development
+- Test: Frontend/Backend
+- Build: Frontend Production
+- Docker: Build and Run
+
+---
+
+## Environment Variables
+
+### Frontend (.env.local)
+
 ```bash
-npm install
-npm run dev  # Starts on http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
 
-### Backend Setup
+### Backend (environment or .env)
+
 ```bash
-cd backend
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-python main.py  # Starts on http://localhost:8000
+DATABASE_URL=sqlite:///./sytescan.db
+UPLOAD_DIR=./uploads
+LOG_LEVEL=INFO
+SECRET_KEY=your-secret-key-here
+CORS_ORIGINS=http://localhost:3000
 ```
 
-## Development Workflow
+---
 
-### 1. Environment Configuration
-- Copy `.env.example` to `.env.local`
-- Modify environment variables as needed
-- Backend uses SQLite by default (no additional setup required)
+## Troubleshooting
 
-### 2. File Structure
-```
-├── src/                 # Frontend (Next.js)
-├── backend/            # Backend (FastAPI)
-│   ├── app/           # Application code
-│   ├── tests/         # Backend tests
-│   └── venv/          # Python virtual environment
-├── .vscode/           # VS Code configuration
-└── uploads/           # File storage
-```
+### Port Conflicts
 
-### 3. API Documentation
-- Swagger UI: http://localhost:8000/docs
-- ReDoc: http://localhost:8000/redoc
+Default ports:
+- Frontend: 3000
+- Backend: 8000
 
-### 4. Testing
-- **Frontend**: `npm test` (Vitest)
-- **Backend**: `cd backend && venv\Scripts\pytest.exe`
-- **E2E**: `npm run test:e2e`
+Change in respective config files if needed.
 
-### 5. Linting & Code Quality
-- **Frontend**: `npm run lint`
-- **Backend**: Configure flake8/black in VS Code
+### Python Virtual Environment
 
-## Debugging Tips
-
-### Frontend Debugging
-- Use VS Code debugger with "Debug Frontend" configuration
-- React DevTools browser extension recommended
-- Check browser console for client-side errors
-
-### Backend Debugging
-- Use VS Code debugger with "Debug Backend" configuration
-- Set breakpoints in Python code
-- Check terminal output for server logs
-- Use `/health` endpoint to verify backend is running
-
-### Common Issues
-1. **Port conflicts**: Change ports in configuration files
-2. **Python path issues**: Ensure virtual environment is activated
-3. **CORS errors**: Check CORS_ORIGINS in environment variables
-4. **File upload issues**: Verify uploads directory permissions
-
-## Production Build
-
-### Local Production Build
+Always activate before running backend:
 ```bash
-npm run build
-npm start
+# Windows
+backend\venv\Scripts\activate
+
+# macOS/Linux
+source backend/venv/bin/activate
 ```
 
-### Docker Production
+### YOLOv8 Model
+
+The model downloads automatically on first run (~6MB). Ensure internet connectivity.
+
+### File Upload Issues
+
+Verify `uploads/` directory exists with write permissions:
 ```bash
-docker-compose up --build
+mkdir -p uploads/projects
+chmod 755 uploads  # Unix only
 ```
+
+### CORS Errors
+
+Check `CORS_ORIGINS` environment variable matches your frontend URL.
+
+---
 
 ## Performance Notes
-- YOLOv8 model downloads automatically on first run (~6MB)
-- Image processing takes 2-10 seconds depending on hardware
-- SQLite database created automatically in backend directory
 
-## Useful URLs
-- Frontend: http://localhost:3000
-- Backend API: http://localhost:8000
-- API Docs: http://localhost:8000/docs
-- Health Check: http://localhost:8000/health
+- **Image Processing**: 2-10 seconds per image (CPU)
+- **Model Size**: ~6MB (YOLOv8n)
+- **First Run**: Model download required
+
+For production deployment, see [DEPLOYMENT.md](DEPLOYMENT.md).
