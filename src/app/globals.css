@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --royal-cream: #F5F5DC;
+  --royal-cream-light: #fefdfb;
+  --royal-cream-dark: #e6e6c7;
+  --syte-black: #1a1a1a;
+  --syte-white: #ffffff;
+}
+
+@layer base {
+  body {
+    @apply bg-royal-gradient text-syte-black antialiased;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-syte-black;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
+  }
+  
+  .btn-secondary {
+    @apply bg-royal-cream-600 hover:bg-royal-cream-700 text-syte-black font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-royal-cream-500 focus:ring-offset-2;
+  }
+  
+  .btn-outline {
+    @apply border-2 border-syte-gray-300 hover:border-syte-gray-400 text-syte-black font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-syte-gray-500 focus:ring-offset-2;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-lg border border-syte-gray-200 transition-shadow duration-200 hover:shadow-xl;
+  }
+  
+  .input-field {
+    @apply w-full px-3 py-2 border border-syte-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-colors duration-200;
+  }
+  
+  .page-container {
+    @apply min-h-screen bg-royal-gradient;
+  }
+  
+  .content-container {
+    @apply max-w-7xl mx-auto px-4 py-8;
+  }
+  
+  .section-header {
+    @apply text-center mb-12;
+  }
+  
+  .section-title {
+    @apply text-3xl font-bold text-syte-black mb-4;
+  }
+  
+  .section-subtitle {
+    @apply text-xl text-syte-gray-600 max-w-3xl mx-auto;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-in-out;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+  
+  .animate-slide-down {
+    animation: slideDown 0.3s ease-out;
+  }
+}

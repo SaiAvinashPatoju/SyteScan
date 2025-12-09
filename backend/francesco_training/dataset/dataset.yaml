@@ -1,0 +1,9 @@
+names:
+- furniture
+- Chair
+- Sofa
+- Table
+nc: 4
+path: C:\Users\Avinash\Desktop\New folder (2)\sytescan\backend\francesco_training\dataset
+train: train/images
+val: val/images
