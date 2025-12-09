@@ -2,6 +2,14 @@ import os
 from typing import List
 from pydantic_settings import BaseSettings
 
+def parse_cors_origins(v: str) -> List[str]:
+    """Parse comma-separated CORS origins from environment variable."""
+    if isinstance(v, list):
+        return v
+    if v:
+        return [origin.strip() for origin in v.split(",") if origin.strip()]
+    return ["http://localhost:3000"]
+
 class Settings(BaseSettings):
     # Database
     database_url: str = "sqlite:///./sytescan.db"
@@ -13,7 +21,12 @@ class Settings(BaseSettings):
     
     # Security
     secret_key: str = "dev-secret-key-change-in-production"
-    cors_origins: List[str] = ["http://localhost:3000"]
+    cors_origins_str: str = "http://localhost:3000,https://sytescan.vercel.app,https://sytescan-frontend.vercel.app,https://sytescan.onrender.com,https://sytescan-frontend.onrender.com"
+    
+    @property
+    def cors_origins(self) -> List[str]:
+        """Parse CORS origins from comma-separated string."""
+        return parse_cors_origins(self.cors_origins_str)
     
     # Logging
     log_level: str = "INFO"

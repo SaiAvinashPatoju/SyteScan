@@ -4,12 +4,12 @@
 
 **AI-powered construction progress monitoring using computer vision**
 
-[![CI](https://github.com/YOUR_USERNAME/sytescan/actions/workflows/ci.yml/badge.svg)](https://github.com/YOUR_USERNAME/sytescan/actions/workflows/ci.yml)
+[![CI](https://github.com/SaiAvinashPatoju/sytescan/actions/workflows/ci.yml/badge.svg)](https://github.com/SaiAvinashPatoju/sytescan/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![Node.js 18+](https://img.shields.io/badge/node.js-18+-green.svg)](https://nodejs.org/)
 
-[Live Demo](#) • [Documentation](docs/) • [Quick Start](#-quick-start) • [API Docs](http://localhost:8000/docs)
+[Live Demo](https://sytescan.onrender.com) • [Documentation](docs/) • [Quick Start](#-quick-start) • [API Docs](http://localhost:8000/docs)
 
 </div>
 

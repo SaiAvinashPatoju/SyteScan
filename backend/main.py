@@ -47,14 +47,28 @@ app = FastAPI(
 # Add middleware
 app.add_middleware(LoggingMiddleware)
 
-# Configure CORS
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=settings.cors_origins,
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+# Configure CORS - Log allowed origins for debugging
+cors_origins = settings.cors_origins
+logger.info(f"CORS allowed origins: {cors_origins}")
+
+# Check if wildcard is requested (for debugging)
+if "*" in cors_origins:
+    logger.warning("CORS wildcard '*' enabled - use only for debugging!")
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],
+        allow_credentials=False,  # Must be False with wildcard
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+else:
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=cors_origins,
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
 
 # Add exception handlers
 app.add_exception_handler(SyteScanException, sytescan_exception_handler)
