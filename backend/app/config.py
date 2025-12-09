@@ -32,8 +32,8 @@ class Settings(BaseSettings):
     log_level: str = "INFO"
     log_format: str = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
     
-    # YOLOv8 Configuration
-    yolo_model: str = "yolov8m.pt"  # Options: yolov8n.pt, yolov8s.pt, yolov8m.pt, yolov8l.pt, yolov8x.pt
+    # YOLOv8 Configuration - Use NANO model for Render free tier
+    yolo_model: str = "yolov8n.pt"  # Nano model for low memory environments
     detection_confidence: float = 0.5
     
     # Model performance notes:

@@ -44,22 +44,19 @@ app = FastAPI(
     lifespan=lifespan
 )
 
-# Add middleware
-app.add_middleware(LoggingMiddleware)
-
-# Configure CORS - Log allowed origins for debugging
-cors_origins = settings.cors_origins
-logger.info(f"CORS allowed origins: {cors_origins}")
-
-# Always allow all origins for simplicity on Render
+# Configure CORS FIRST (before other middleware)
+logger.info("Configuring CORS with allow_origins=['*']")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=False,
-    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allow_methods=["*"],
     allow_headers=["*"],
     expose_headers=["*"],
 )
+
+# Add logging middleware after CORS
+app.add_middleware(LoggingMiddleware)
 
 # Add exception handlers
 app.add_exception_handler(SyteScanException, sytescan_exception_handler)
